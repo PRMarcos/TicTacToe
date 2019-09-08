@@ -1,25 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React,{useState} from 'react';
+import {Grid} from "./Components/Grid";
+import {Container} from "./AppStyle"
+
 
 function App() {
+  const [dados,setDados] = useState(["","","","","","","","","",]);
+  const [player,setPlayer] = useState("X");
+  
+  function switchPlayer(){
+    if(player === "X"){
+      setPlayer("O");
+    }else{
+      setPlayer("X");
+    }
+  }
+
+  const handleClick = (key) =>{
+    
+    const newDados = [...dados];
+    newDados[key] = player;
+    switchPlayer();
+    setDados(newDados); 
+    console.log("parent clicado: ", key)
+}
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  <Container>
+    <Grid  data={dados} hc={handleClick}/>
+  </Container>
   );
 }
 
