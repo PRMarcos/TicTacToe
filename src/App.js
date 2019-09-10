@@ -3,36 +3,88 @@ import { Grid } from "./Components/Grid";
 import { Container } from "./AppStyle";
 
 function App() {
-  const [dados, setDados] = useState(["", "", "", "", "", "", "", "", ""]);
-  const [winner, setWinner] = useState([]);
-  const [player, setPlayer] = useState("X");
+  const [dados, setDados] = useState({
+    grid: ["", "", "", "", "", "", "", "", ""],
+    winner: [],
+    currentPlayer: "X"
+  });
+  const [GameEnded, setGameEnded] = useState(false);
 
-  function switchPlayer() {
-    if (player === "X") {
-      setPlayer("O");
+  function checkSpot(key) {
+    return dados.grid[key] !== "" ? false : true;
+  }
+
+  function checkWinner(array) {
+    if (array[0] === array[1] && array[1] === array[2] && array[0] !== "")
+      return [0, 1, 2];
+    if (array[3] === array[4] && array[4] === array[5] && array[3] !== "")
+      return [3, 4, 5];
+    if (array[6] === array[7] && array[7] === array[8] && array[6] !== "")
+      return [6, 7, 8];
+
+    if (array[0] === array[3] && array[3] === array[6] && array[0] !== "")
+      return [0, 3, 6];
+    if (array[1] === array[4] && array[4] === array[7] && array[1] !== "")
+      return [1, 4, 7];
+    if (array[2] === array[8] && array[8] === array[5] && array[2] !== "")
+      return [2, 5, 8];
+
+    if (array[0] === array[4] && array[4] === array[8] && array[0] !== "")
+      return [0, 4, 8];
+    if (array[2] === array[4] && array[4] === array[6] && array[2] !== "")
+      return [2, 4, 6];
+
+    return [];
+  }
+
+  function switchPlayer(CurrentPlayer) {
+    if (CurrentPlayer === "X") {
+      return "O";
     } else {
-      setPlayer("X");
+      return "X";
     }
   }
 
-  function checkSpot(key) {
-    return dados[key] !== "" ? false : true;
+  function UpdateData(key) {
+    let newDados = [...dados.grid];
+    newDados[key] = dados.currentPlayer;
+    const winner = checkWinner(newDados);
+    setDados({
+      grid: newDados,
+      winner: winner,
+      currentPlayer: switchPlayer(dados.currentPlayer)
+    });
+
+    if (checkWinner(newDados).length > 0) {
+      setGameEnded(true);
+    }
   }
 
   const handleClick = key => {
-    if (checkSpot(key)) {
-      const newDados = [...dados];
-      newDados[key] = player;
-      switchPlayer();
-      setDados(newDados);
-      console.log("spot clicked: ", key);
+    if (checkSpot(key) && !GameEnded) {
+      UpdateData(key);
     } else {
-      console.log("spot filled", key);
     }
   };
+
+  function RestartGame() {
+    setDados({
+      grid: ["", "", "", "", "", "", "", "", ""],
+      winner: [],
+      currentPlayer: "X"
+    });
+    setGameEnded(false);
+  }
   return (
     <Container>
-      <Grid data={dados} hc={handleClick} wn={winner} />
+      {checkWinner(dados.grid).length > 0 ? (
+        <h1>Vencedor: {dados.grid[checkWinner(dados.grid)[0]]}</h1>
+      ) : (
+        <h1>Jogador atual: {dados.currentPlayer}</h1>
+      )}
+
+      <Grid data={dados} hc={handleClick} />
+      <button onClick={RestartGame}>Reiniciar</button>
     </Container>
   );
 }

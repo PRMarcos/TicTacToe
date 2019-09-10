@@ -3,13 +3,13 @@ import { StyledGrid, StyledGridSpot } from "./style";
 
 function Grid(props) {
   const indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  const { data, hc, wn } = props;
+  const { data, hc } = props;
 
   return (
     <StyledGrid>
       {indexes.map(i => (
         <StyledGridSpot
-          winner={wn.find(element => {
+          winner={data.winner.find(element => {
             return element === i;
           })}
           key={i}
@@ -17,7 +17,7 @@ function Grid(props) {
             hc(i);
           }}
         >
-          {data[i]}
+          {data.grid[i]}
         </StyledGridSpot>
       ))}
     </StyledGrid>
