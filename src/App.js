@@ -8,10 +8,22 @@ function App() {
     winner: [],
     currentPlayer: "X"
   });
+  const [IsTie, setIsTie] = useState(false);
   const [GameEnded, setGameEnded] = useState(false);
 
   function checkSpot(key) {
     return dados.grid[key] !== "" ? false : true;
+  }
+  function isGridFull(array) {
+    if (
+      array.find(element => {
+        return element === "";
+      }) !== undefined
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   function checkWinner(array) {
@@ -49,14 +61,17 @@ function App() {
     let newDados = [...dados.grid];
     newDados[key] = dados.currentPlayer;
     const winner = checkWinner(newDados);
+
     setDados({
       grid: newDados,
       winner: winner,
       currentPlayer: switchPlayer(dados.currentPlayer)
     });
-
-    if (checkWinner(newDados).length > 0) {
+    if (checkWinner(newDados).length > 0 || isGridFull(newDados)) {
       setGameEnded(true);
+      if (dados.winner.length === 0) {
+        setIsTie(true);
+      }
     }
   }
 
@@ -74,11 +89,14 @@ function App() {
       currentPlayer: "X"
     });
     setGameEnded(false);
+    setIsTie(false);
   }
   return (
     <Container>
       {checkWinner(dados.grid).length > 0 ? (
         <h1>Vencedor: {dados.grid[checkWinner(dados.grid)[0]]}</h1>
+      ) : IsTie ? (
+        <h1>EMPATE!</h1>
       ) : (
         <h1>Jogador atual: {dados.currentPlayer}</h1>
       )}
