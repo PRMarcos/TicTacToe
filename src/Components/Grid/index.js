@@ -5,12 +5,6 @@ function Grid(props) {
   const indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   const { data, hc, wn } = props;
 
-  function HighLight(value, array) {
-    return array.find(element => {
-      return element === value;
-    });
-  }
-
   return (
     <StyledGrid>
       {indexes.map(i => (

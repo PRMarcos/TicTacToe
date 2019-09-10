@@ -15,12 +15,20 @@ function App() {
     }
   }
 
+  function checkSpot(key) {
+    return dados[key] !== "" ? false : true;
+  }
+
   const handleClick = key => {
-    const newDados = [...dados];
-    newDados[key] = player;
-    switchPlayer();
-    setDados(newDados);
-    console.log("parent clicado: ", key);
+    if (checkSpot(key)) {
+      const newDados = [...dados];
+      newDados[key] = player;
+      switchPlayer();
+      setDados(newDados);
+      console.log("spot clicked: ", key);
+    } else {
+      console.log("spot filled", key);
+    }
   };
   return (
     <Container>
