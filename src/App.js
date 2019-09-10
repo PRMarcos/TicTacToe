@@ -1,32 +1,31 @@
-import React,{useState} from 'react';
-import {Grid} from "./Components/Grid";
-import {Container} from "./AppStyle"
-
+import React, { useState } from "react";
+import { Grid } from "./Components/Grid";
+import { Container } from "./AppStyle";
 
 function App() {
-  const [dados,setDados] = useState(["","","","","","","","","",]);
-  const [player,setPlayer] = useState("X");
-  
-  function switchPlayer(){
-    if(player === "X"){
+  const [dados, setDados] = useState(["", "", "", "", "", "", "", "", ""]);
+  const [winner, setWinner] = useState([]);
+  const [player, setPlayer] = useState("X");
+
+  function switchPlayer() {
+    if (player === "X") {
       setPlayer("O");
-    }else{
+    } else {
       setPlayer("X");
     }
   }
 
-  const handleClick = (key) =>{
-    
+  const handleClick = key => {
     const newDados = [...dados];
     newDados[key] = player;
     switchPlayer();
-    setDados(newDados); 
-    console.log("parent clicado: ", key)
-}
+    setDados(newDados);
+    console.log("parent clicado: ", key);
+  };
   return (
-  <Container>
-    <Grid  data={dados} hc={handleClick}/>
-  </Container>
+    <Container>
+      <Grid data={dados} hc={handleClick} wn={winner} />
+    </Container>
   );
 }
 

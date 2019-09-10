@@ -1,21 +1,33 @@
 import React from "react";
-import { StyledGrid } from "./style";
+import { StyledGrid, StyledGridSpot } from "./style";
 
-function Grid(props){
-    let _grid;
-    const indexes = [0,1,2,3,4,5,6,7,8]
-    const {data, hc} = props;
-    
-    if(data){
-        _grid= data
-    }else{
-        _grid = ["","","","","","","","",""];
-    }
-    return(
+function Grid(props) {
+  const indexes = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const { data, hc, wn } = props;
+
+  function HighLight(value, array) {
+    return array.find(element => {
+      return element === value;
+    });
+  }
+
+  return (
     <StyledGrid>
-      
-        {indexes.map((i)=> <div key={i} onClick={()=>{hc(i)}}>{_grid[i]}</div>)}  
-    </StyledGrid>)
+      {indexes.map(i => (
+        <StyledGridSpot
+          winner={wn.find(element => {
+            return element === i;
+          })}
+          key={i}
+          onClick={() => {
+            hc(i);
+          }}
+        >
+          {data[i]}
+        </StyledGridSpot>
+      ))}
+    </StyledGrid>
+  );
 }
 
-export {Grid}
+export { Grid };
